@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.4/raphael-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.5.1/justgage.min.js"></script>
+
+    <script>
+        var accessToken = "7c1b1fe4b5b2a73be30a0e15986f5a5566fd7a3a";
+        var deviceID = "480027000f51373331333230";
+        var urlC = "https://api.particle.io/v1/devices/" + deviceID + "/gradosC";
+        var urlF = "https://api.particle.io/v1/devices/" + deviceID + "/gradosF";
+        var urlH = "https://api.particle.io/v1/devices/" + deviceID + "/humedad";
+
+        function callbackH(data, status) {
+            if (status == "success") {
+                temp = parseFloat(data.result);
+                temp = temp.toFixed(2);
+                gH.refresh(temp);
+                setTimeout(getReading, 1000);
+            } else {
+                alert("There was a problem");
+            }
+        }
+
+        function getReadingH() {
+            $.get(urlH, {
+                access_token: accessToken
+            }, callbackH);
+        }
+
+        function callbackF(data, status) {
+            if (status == "success") {
+                temp = parseFloat(data.result);
+                temp = temp.toFixed(2);
+                gF.refresh(temp);
+                setTimeout(getReadingF, 1000);
+            } else {
+                alert("There was a problem");
+            }
+        }
+
+        function getReadingF() {
+            $.get(urlF, {
+                access_token: accessToken
+            }, callbackF);
+        }
+
+        function callbackC(data, status) {
+            if (status == "success") {
+                temp = parseFloat(data.result);
+                temp = temp.toFixed(2);
+                gC.refresh(temp);
+                setTimeout(getReadingC, 1000);
+            } else {
+                alert("There was a problem");
+            }
+        }
+
+        function getReadingC() {
+            $.get(urlC, {
+                access_token: accessToken
+            }, callbackC);
+        }
+    </script>
+</head>
+
+<body>
+    <div id="gaugeC" class="50x25px"></div>
+    <div id="gaugeF" class="100x50px"></div>
+    <div id="gaugeH" class="150x75px"></div>
+
+    <script>
+        var gC = new JustGage({
+            id: "gaugeC",
+            value: 0,
+            min: 0,
+            max: 100,
+            label: "Temperatura (C)"
+        });
+        getReadingC();
+    </script>
+    <script>
+        var gF = new JustGage({
+            id: "gaugeF",
+            value: 0,
+            min: 0,
+            max: 100,
+            label: "Temperatura (F)"
+        });
+        getReadingF();
+    </script>
+    <script>
+        var gH = new JustGage({
+            id: "gaugeH",
+            value: 0,
+            min: 0,
+            max: 100,
+            label: "Humedad (%)"
+        });
+        getReadingH();
+    </script>
+
+</body>
+
+</html>
